@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.CCS;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspect.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
@@ -16,19 +20,22 @@ namespace Business.Concrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal;//soyut nesne ile bağlantı kur
-
+      
         public ProductManager(IProductDal productDal)//ProductManager newlendiğinde constructor diyor ki
                                                      //IproductDal referansı ver
         {
             _productDal = productDal;
+            
         }
-
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            if(product.ProductName.Length<2)
+            var result = _productDal.GetAll(p => p.CategoryId == product.CategoryId).Count;
+            if(result>=10)
             {
-                return new ErrorResult(Messages.ProductNameInvalid);
+                return new ErrorResult(Messages.ProductCountofCategoryErrors);
             }
+          
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);//bunu yapabilmenin yöntemi constructor dır.
         }

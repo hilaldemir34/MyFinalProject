@@ -18,10 +18,10 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public List<ProductDetailDto> GetProductDetails()
         {
-            using(NorthwindContext northwindContext=new NorthwindContext())
+            using(NorthwindContext hdContext=new NorthwindContext())
             {
-                var result = from p in northwindContext.Products
-                             join c in northwindContext.Categories
+                var result = from p in hdContext.Products
+                             join c in hdContext.Categories
                              on p.CategoryId equals c.CategoryId
                              select new ProductDetailDto
                              {

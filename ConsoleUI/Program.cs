@@ -1,6 +1,5 @@
 ﻿using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
-using DataAccess.Concrete.InMemory;
 using System;
 
 namespace ConsoleUI
@@ -13,14 +12,7 @@ namespace ConsoleUI
             //CategoryTest();
         }
 
-        private static void CategoryTest()
-        {
-            CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());//categorymanager ı newlemek için ıcategorydal ister.
-            foreach (var category in categoryManager.GetAll())
-            {
-                Console.WriteLine(category);
-            }
-        }
+       
 
         private static void ProductTest()
         {

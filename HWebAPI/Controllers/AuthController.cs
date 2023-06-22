@@ -2,7 +2,7 @@
 using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HWebAPI.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -9,6 +9,6 @@ namespace Core.Utilities.Security.JWT
 {
     public interface ITokenHelper//accesstoken ı oluşturacak yapı.token ı oluşturacak yapı.
     {
-        AccessToken CreateToken(User user,List<OperationClaim>operationClaims)
+        AccessToken CreateToken(User user, List<OperationClaim> operationClaims);
     }
 }

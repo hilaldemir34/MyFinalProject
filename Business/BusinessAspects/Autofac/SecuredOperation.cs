@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Castle.DynamicProxy;
 using Core.Utilities.IoC;
+using Microsoft.AspNetCore.Http;
+using Core.Extensions;
 
 namespace Business.BusinessAspects.Autofac
 {

@@ -1,35 +1,42 @@
-﻿using Core.Entities.Concrete;
-using Core.Extensions;
-using Core.Utilities.Security.Encryption;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Core.Entities.Concrete;
+using Core.Extensions;
+using Core.Utilities.Security.Encryption;
+using Core.Utilities.Security.JWT;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Utilities.Security.JWT
+namespace Core.Utilities.Security.Jwt
 {
     public class JwtHelper : ITokenHelper
     {
-        public IConfiguration Configuration { get; }//IConfiguration ile app settingsi okuyacağım
+        public IConfiguration Configuration { get; }
         private TokenOptions _tokenOptions;
         private DateTime _accessTokenExpiration;
-        public JwtHelper(IConfiguration configuration)
+        public JwtHelper(IConfiguration configuration,IOptions<TokenOptions> tokenoptions)
         {
             Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+            _tokenOptions = tokenoptions.Value;
 
         }
-        public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)//Kullanıcı için token bilgisi üret
-                                                                                         //user bilgisi ve claimleri ver
-                                                                                         //ona göre token oluşt.
+        public void GenerateToken()
+        {
+            string audience = _tokenOptions.Audience;
+            string issuer = _tokenOptions.Issuer;
+            int accessTokenExpiration = _tokenOptions.AccessTokenExpiration;
+            string securityKey = _tokenOptions.SecurityKey;
+     
+        }
+        public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
-            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);//_tokenoptionstaki securitykey i kullanarak oluştur.
+            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
             var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
